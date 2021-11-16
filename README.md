@@ -3,5 +3,5 @@
 ## contributor
 - Mohamed El Baha
 - Samil Rmili
-- Ismail Hadrami
+- Ismail EL Hadrami
 
