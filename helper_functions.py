@@ -15,4 +15,4 @@ def import_dataset(name):
         elif name == "banknote":
             df = pd.read_csv("/Data/data_banknote_authentication.csv")
             return df
-            
+
