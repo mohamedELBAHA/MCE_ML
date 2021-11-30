@@ -4,9 +4,6 @@
 - Mohamed El Baha
 - Sami Rmili
 - Ismail EL Hadrami
-
-## Introduction & Context
-###### -----------------------------------------
 ### 1 - The project
 
 In this project we will develop a binary classification algorithms and compare them, the main objective
@@ -26,9 +23,6 @@ hosted on the same source as the first,
 
 
 [ Chronic Kidney Disease](https://www.kaggle.com/mansoordaku/ckdisease)
-
-## Good programming practices
-###### ----------------------------------------------------------------------------
 
 
 
