@@ -4,22 +4,26 @@
 
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import train_test_split
+
+
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
-# this function will 
-# coded by :  (@i19elhad)
+
 
 def import_dataset(name):
     """
     @author : Ismail El Hadrami
     import the data  based on its name ( kidney, banknote ...)
 
-    input : 
+    Parameters :
+    ----------- 
         name : the name of the dataset
         type : string
 
-    output : 
+    Returns : 
+    ---------
         df   : dataset 
         type : dataframe
     """   
@@ -40,11 +44,12 @@ def clean_data(data):
     @author : Sami RMILI
     Cleaning the data provided by the replacing the unknown values
 
-    input :
+    Parameters :
         data  : dataset to be cleaned 
         type  : DataFrame
 
-    Output :
+    returns :
+    ---------
         data  : Cleand dataset
         type  : DataFrame    
     """
@@ -108,26 +113,27 @@ def normalize_data(data):
 
 def preprocess_data(data, classif="class"):
     """
-        @author : Sami RMILI
-        Preprocessing the data (cleaning and normalization)
+    @author : Sami RMILI
+    Preprocessing the data (cleaning and normalization)
 
-        Parameters
-        ----------
+    Parameters
+    ----------
 
-            data : DataFrame
-            The pandas dataframe to preprocess
+        data : DataFrame
+        The pandas dataframe to preprocess
 
-            classif : string, optional
-            Specify the name of the ground-truth column (default is "class")
+        classif : string, optional
+        Specify the name of the ground-truth column (default is "class")
 
         Returns
         -------
 
-            DataFrame
-            The preprocessed data (without the ground-truth)
+        DataFrame
+        The preprocessed data (without the ground-truth)
 
-            DataFrame
-            The ground-truth dataframe
+        DataFrame
+        The ground-truth dataframe
+    
     """
 
     # Clean data
@@ -141,6 +147,31 @@ def preprocess_data(data, classif="class"):
     data = normalize_data(data)
 
     return data, target
+
+
+
+def split_data(X,y,test_size):
+    """
+    @author : Mohamed EL BAHA
+    Split the data into a training set and a validation set
+    
+    Parameters :
+    ------------
+        X    : features of the data
+        type : array 
+
+        test_size : the test size 
+        type      : float
+    
+    Returns :
+    ---------
+        training set for features and labels, validation set features and labels. 
+    """
+    
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=test_size,random_state=42)
+
+    return X_train, X_test, y_train, y_test
+
 
 
 df = import_dataset("kidney")
