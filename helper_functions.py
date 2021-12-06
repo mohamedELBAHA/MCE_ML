@@ -5,10 +5,11 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 
 
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
+#pd.set_option('display.max_rows', None)
+#pd.set_option('display.max_columns', None)
 
 
 
@@ -160,6 +161,9 @@ def split_data(X,y,test_size):
         X    : features of the data
         type : array 
 
+        y    : target ( labels)
+        type : array 
+
         test_size : the test size 
         type      : float
     
@@ -173,9 +177,20 @@ def split_data(X,y,test_size):
     return X_train, X_test, y_train, y_test
 
 
+def feature_selection(df, method , variance_threshold = 0.95):
+    """
+    @author : Mohamed EL Baha
+
+    
+    """
+    if 'method' == 'PCA' :
+        return 0
 
 
-df = import_dataset("kidney")
-df, target = preprocess_data(df, "classification")
-print(df.describe())
+
+
+
+#df = import_dataset("kidney")
+#df, target = preprocess_data(df, "classification")
+#print(df.describe())
 
