@@ -18,13 +18,13 @@ def import_dataset(name):
     @author : Ismail El Hadrami
     import the data  based on its name ( kidney, banknote ...)
 
-    Parameters :
-    ----------- 
+    Parameters 
+    ---------- 
         name : the name of the dataset
         type : string
 
-    Returns : 
-    ---------
+    Returns 
+    -------
         df   : dataset 
         type : dataframe
     """   
@@ -45,12 +45,13 @@ def clean_data(data):
     @author : Sami RMILI
     Cleaning the data provided by the replacing the unknown values
 
-    Parameters :
+    Parameters 
+    ----------
         data  : dataset to be cleaned 
         type  : DataFrame
 
-    returns :
-    ---------
+    returns
+    -------
         data  : Cleand dataset
         type  : DataFrame    
     """
@@ -86,20 +87,18 @@ def clean_data(data):
 
 def normalize_data(data):
     """
-        @author : Sami RMILI
-        One-hot encode the data and normalize it
+    @author : Sami RMILI
+    One-hot encode the data and normalize it
 
-        Parameters
-        ----------
+    Parameters
+    ----------
+        data : DataFrame
+        The pandas dataframe to preprocess
 
-            data : DataFrame
-            The pandas dataframe to preprocess
-
-        Returns
-        -------
-
-            DataFrame
-            The normalized dataset
+    Returns
+    -------
+        DataFrame
+        The normalized dataset
 
     """
 
@@ -156,8 +155,8 @@ def split_data(X,y,test_size):
     @author : Mohamed EL BAHA
     Split the data into a training set and a validation set
     
-    Parameters :
-    ------------
+    Parameters 
+    ----------
         X    : features of the data
         type : array 
 
@@ -167,8 +166,8 @@ def split_data(X,y,test_size):
         test_size : the test size 
         type      : float
     
-    Returns :
-    ---------
+    Returns 
+    -------
         training set for features and labels, validation set features and labels. 
     """
     
@@ -185,6 +184,20 @@ def feature_selection(df, method , variance_threshold = 0.95):
     """
     if 'method' == 'PCA' :
         return 0
+
+def define_model(model_name):
+    """
+    @author : Mohamed EL BAHA
+    this function return a model by given a name 
+    
+    Parameters
+    ----------
+        model_name : name of the model (SVM, DecisionTrees)
+        type : sklearn method
+    """  
+
+    if model_name == 'SVM':
+        
 
 
 
