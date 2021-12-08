@@ -37,7 +37,7 @@ def import_dataset(name):
         return df
     else:
         print("Invalid dataset name. Choose 'kidney' or 'banknote'")
-        return
+        return 
 
 
 def clean_data(data):
@@ -148,7 +148,43 @@ def preprocess_data(data, classif="class"):
 
     return data, target
 
+def hsseb(n,m):
+    return n+m
 
+
+def feature_selection(df, method, variance_threshold = 0.95):
+    """
+    @author : Mohamed EL Baha
+    
+    Paramteres
+    ----------
+        df : data frame to compresse
+        type : DataFrame
+
+        method : name of the methode of dimentionality reduction
+        type   : String
+    
+    Returns
+    -------
+        data : compressed data set
+        type : DataFrame 
+    
+    """
+    if method == 'PCA' :
+        print("Feature Selection ==> Principal Component Analysis")
+        X,_ = df.values[:,:-1],df.values[:,:-1]
+        pca = PCA(n_components=len(df.columns)-1)
+        pca.fit(X)
+        y = np.cumsum(pca.explained_variance_ratio_) 
+
+        nb_features = len(df.columns) - sum(y>=variance_threshold)
+        print(f'Number of features selected : {nb_features}')
+        print(' ✓ Data dimension successfuly reduced')
+        new_X = pca.fit_transform(X)      
+        data = pd.DataFrame(new_X[:,:nb_features]) 
+        data[df.columns[-1]] = df.iloc[:,-1] # indexing the new dataframe
+        
+    return data
 
 def split_data(X,y,test_size):
     """
@@ -176,34 +212,5 @@ def split_data(X,y,test_size):
     return X_train, X_test, y_train, y_test
 
 
-def feature_selection(df, method , variance_threshold = 0.95):
-    """
-    @author : Mohamed EL Baha
 
-    
-    """
-    if 'method' == 'PCA' :
-        return 0
-
-def define_model(model_name):
-    """
-    @author : Mohamed EL BAHA
-    this function return a model by given a name 
-    
-    Parameters
-    ----------
-        model_name : name of the model (SVM, DecisionTrees)
-        type : sklearn method
-    """  
-
-    if model_name == 'SVM':
-        
-
-
-
-
-
-#df = import_dataset("kidney")
-#df, target = preprocess_data(df, "classification")
-#print(df.describe())
 
