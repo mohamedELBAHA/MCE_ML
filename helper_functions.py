@@ -148,9 +148,6 @@ def preprocess_data(data, classif="class"):
 
     return data, target
 
-def hsseb(n,m):
-    return n+m
-
 
 def feature_selection(df, method, variance_threshold = 0.95):
     """
@@ -171,7 +168,7 @@ def feature_selection(df, method, variance_threshold = 0.95):
     
     """
     if method == 'PCA' :
-        print("Feature Selection ==> Principal Component Analysis")
+        print("     Feature Selection ==> PCA")
         X,_ = df.values[:,:-1],df.values[:,:-1]
         pca = PCA(n_components=len(df.columns)-1)
         pca.fit(X)
@@ -212,5 +209,33 @@ def split_data(X,y,test_size):
     return X_train, X_test, y_train, y_test
 
 
+def train_model(model,parameters, X,y):
+    """
+    @author : Ismail EL HADRAMI
+    train selected model
+
+    Parameters
+    ----------
+        model : selected model
+        type : sckitlearn object
+
+        params : parameters of the model
+        type : dict
+
+        X : training data
+        type :  array
+
+        y : training labels
+        types : array 
+
+
+    Returns
+    -------
+        score 
+
+    
+    """
+    clf = model(**params)
+    score
 
 
