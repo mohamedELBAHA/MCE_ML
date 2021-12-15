@@ -143,6 +143,7 @@ def preprocess_data(data, classif="class"):
 
     # Remove ground-truth
     target = data[classif]
+    target = pd.get_dummies(target,drop_first=True)
     data = data.drop(columns=classif)
 
     # Normalized data
@@ -225,20 +226,20 @@ def get_model(name):
         type: sklearn class
     """
 
-    models = {'SVC': {'model': SVC,  # Support vector Classifier
+    models = {'svm': {'model': SVC,  
                   'parameters': {'kernel': ['linear', 'rbf', 'sigmoid', 'poly'],
                                  'C': [1, 10],
                                  'degree': [2, 3],
                                  'gamma': ['scale', 'auto']
                                  }
                   },
-          'lr': {'model': LogisticRegression,  # Logistic Regression
+          'lr': {'model': LogisticRegression,  
                  'parameters': {'C': [1, 10],
                                 'fit_intercept': [True, False],
                                 'intercept_scaling': [1, 10],
                                 }
                  },
-          'sgd_clf': {'model': SGDClassifier,  # Stochastic gradient descent classifier
+          'sgd_clf': {'model': SGDClassifier,  
                       'parameters': {'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'],
                                      'penalty': ['l1', 'l2'],
                                      'fit_intercept': [True, False],
