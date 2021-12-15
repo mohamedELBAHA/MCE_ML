@@ -29,8 +29,8 @@ def import_dataset(name):
     -------
         df   : dataset 
         type : dataframe
-    """   
-       
+    """
+
     if name == "kidney":
         df = pd.read_csv("Data/kidney_disease.csv")
         return df
@@ -39,7 +39,7 @@ def import_dataset(name):
         return df
     else:
         print("Invalid dataset name. Choose 'kidney' or 'banknote'")
-        return 
+        return
 
 
 def clean_data(data):
@@ -135,7 +135,7 @@ def preprocess_data(data, classif="class"):
 
         DataFrame
         The ground-truth dataframe
-    
+
     """
 
     # Clean data
@@ -151,10 +151,10 @@ def preprocess_data(data, classif="class"):
     return data, target
 
 
-def feature_selection(df, method, variance_threshold = 0.95):
+def feature_selection(df, method, variance_threshold=0.95):
     """
     @author : Mohamed EL Baha
-    
+
     Paramteres
     ----------
         df : data frame to compresse
@@ -162,33 +162,34 @@ def feature_selection(df, method, variance_threshold = 0.95):
 
         method : name of the methode of dimentionality reduction
         type   : String
-    
+
     Returns
     -------
         data : compressed data set
         type : DataFrame 
-    
-    """
-    if method == 'PCA' :
-        X,_ = df.values[:,:-1],df.values[:,:-1]
-        pca = PCA(n_components=len(df.columns)-1)
-        pca.fit(X)
-        y = np.cumsum(pca.explained_variance_ratio_) 
 
-        nb_features = len(df.columns) - sum(y>=variance_threshold)
-        #print(f'Number of features selected : {nb_features}')
+    """
+    if method == 'PCA':
+        X, _ = df.values[:, :-1], df.values[:, :-1]
+        pca = PCA(n_components=len(df.columns) - 1)
+        pca.fit(X)
+        y = np.cumsum(pca.explained_variance_ratio_)
+
+        nb_features = len(df.columns) - sum(y >= variance_threshold)
+        # print(f'Number of features selected : {nb_features}')
         print(f' ✓ Data dimension successfuly reduced')
-        new_X = pca.fit_transform(X)      
-        data = pd.DataFrame(new_X[:,:nb_features]) 
-        data[df.columns[-1]] = df.iloc[:,-1] # indexing the new dataframe
-        
+        new_X = pca.fit_transform(X)
+        data = pd.DataFrame(new_X[:, :nb_features])
+        data[df.columns[-1]] = df.iloc[:, -1]  # indexing the new dataframe
+
     return data
 
-def split_data(X,y,test_size):
+
+def split_data(X, y, test_size):
     """
     @author : Mohamed EL BAHA
     Split the data into a training set and a validation set
-    
+
     Parameters 
     ----------
         X    : features of the data
@@ -199,18 +200,19 @@ def split_data(X,y,test_size):
 
         test_size : the test size 
         type      : float
-    
+
     Returns 
     -------
         training set for features and labels, validation set features and labels. 
     """
-    
-    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=test_size,random_state=42)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
     return X_train, X_test, y_train, y_test
 
+
 def get_model(name):
-        """
+    """
     @author: Ismail EL HADRAMI
     Get one ML model from a selection of models
     Parameters 
@@ -222,54 +224,55 @@ def get_model(name):
         model : Selected Classification Model
         type: sklearn class
     """
-    models = {'SVC':{'model':SVC, #Support vector Classifier
-                      'parameters':{'kernel':['linear', 'rbf', 'sigmoid', 'poly'], 
-                                                'C'     :[1, 10], 
-                                                'degree': [2, 3],
-                                                'gamma' : ['scale', 'auto']
-                                   }
-                     },
-               'lr':{'model':LogisticRegression, # Logistic Regression
-                                    'parameters':{'C':[1, 10], 
-                                                'fit_intercept' : [True,False],
-                                                'intercept_scaling' : [1,10],
-                                                 }
-                                    },
-                'sgd_clf':{'model':SGDClassifier, # Stochastic gradient descent classifier
-                                    'parameters':{'loss':['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'], 
-                                                'penalty':['l1', 'l2'], 
-                                                'fit_intercept' : [True,False],
-                                                 }
-                                    },
-                 'ab_clf':{'model':AdaBoostClassifier,
-                                    'parameters':{'n_estimators':[50, 100, 150], 
-                                                'algorithm':['SAMME', 'SAMME.R'], 
-                                                'learning_rate' : [0.1,0.5,1]
-                                                 }
-                                    },
-                 'rf_clf':{'model':RandomForestClassifier,
-                                    'parameters':{'n_estimators':[50, 100, 150], 
-                                                'criterion':['gini', 'entropy'], 
-                                                'max_depth' : [2,5,10,None],
-                                                'bootstrap' : [True,False],
-                                                 }
+
+    models = {'SVC': {'model': SVC,  # Support vector Classifier
+                  'parameters': {'kernel': ['linear', 'rbf', 'sigmoid', 'poly'],
+                                 'C': [1, 10],
+                                 'degree': [2, 3],
+                                 'gamma': ['scale', 'auto']
+                                 }
+                  },
+          'lr': {'model': LogisticRegression,  # Logistic Regression
+                 'parameters': {'C': [1, 10],
+                                'fit_intercept': [True, False],
+                                'intercept_scaling': [1, 10],
+                                }
+                 },
+          'sgd_clf': {'model': SGDClassifier,  # Stochastic gradient descent classifier
+                      'parameters': {'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'],
+                                     'penalty': ['l1', 'l2'],
+                                     'fit_intercept': [True, False],
+                                     }
+                      },
+          'ab_clf': {'model': AdaBoostClassifier,
+                     'parameters': {'n_estimators': [50, 100, 150],
+                                    'algorithm': ['SAMME', 'SAMME.R'],
+                                    'learning_rate': [0.1, 0.5, 1]
                                     }
-                }
+                     },
+          'rf_clf': {'model': RandomForestClassifier,
+                     'parameters': {'n_estimators': [50, 100, 150],
+                                    'criterion': ['gini', 'entropy'],
+                                    'max_depth': [2, 5, 10, None],
+                                    'bootstrap': [True, False],
+                                    }
+                     }
+          }
     return models[name]
 
 
-def train_model(name,X_train,y_train):
-        """
+def train_model(name, X_train, y_train):
+    """
     @author: Mohamed EL BAHA, Sami RMILI
     Compute the best model
     Parameters 
     ----------
         name : name of the model
         type : string
-
+    
         X_train : data to train
         type : Dataframe
-
+    
         y_train : ground-truth for training
         type : Dataframe
     Returns 
@@ -277,19 +280,21 @@ def train_model(name,X_train,y_train):
         model : Selected Classification Model
         type: sklearn class
     """
-    # Get the model dictionnary by name
+        # Get the model dictionnary by name
+    
+    
     m = get_model(name)
     print('Selected Model : ', m['model']())
-
+    
     # Specify model and parameters
-    model,params = m['model'], m['parameters']
-
+    model, params = m['model'], m['parameters']
+    
     # Use grid search to come up with the best model (tune parameters)
-    grid = GridSearchCV(model(),params, cv=5)
-    grid.fit(X_train,y_train)
+    grid = GridSearchCV(model(), params, cv=5)
+    grid.fit(X_train, y_train)
     best_train_score = grid.best_score_
     best_train_param = grid.best_params_
     model = grid.best_estimator_
-
+    
     return model, best_train_score
 
