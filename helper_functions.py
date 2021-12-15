@@ -211,7 +211,19 @@ def split_data(X,y,test_size):
 
 def get_model(name):
     """
-    
+    @author: Ismail EL HADRAMI
+
+    Get one ML model from a selection of models
+
+    Parameters 
+    ----------
+        name : name of the model
+        type : string
+    Returns 
+    -------
+        model : Selected Classification Model
+        type: sklearn class
+
     """
     models = {'SVC':{'model':SVC, #Support vector Classifier
                       'parameters':{'kernel':['linear', 'rbf', 'sigmoid', 'poly'], 
