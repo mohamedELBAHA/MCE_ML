@@ -12,6 +12,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import GridSearchCV
 
 
 def import_dataset(name):
@@ -208,41 +209,11 @@ def split_data(X,y,test_size):
 
     return X_train, X_test, y_train, y_test
 
-
-def train_model(model,parameters, X,y):
+def get_model(name):
     """
-    @author : Ismail EL HADRAMI
-    train selected model
-
-    Parameters
-    ----------
-        model : selected model
-        type : sckitlearn object
-
-        params : parameters of the model
-        type : dict
-
-        X : training data
-        type :  array
-
-        y : training labels
-        types : array 
-
-
-    Returns
-    -------
-        score 
-
     
     """
-    clf = model(parameters)
-    scor = cross_val_score(clf, X, y, cv=5, scoring='f1_macro').mean()
-    clf.fit(X,y)
-    return scor, clf
-
-
-def model(name):
-    models_dict = {'SVC':{'model':SVC, #Support vector Classifier
+    models = {'SVC':{'model':SVC, #Support vector Classifier
                       'parameters':{'kernel':['linear', 'rbf', 'sigmoid', 'poly'], 
                                                 'C'     :[1, 10], 
                                                 'degree': [2, 3],
@@ -261,18 +232,13 @@ def model(name):
                                                 'fit_intercept' : [True,False],
                                                  }
                                     },
-                'dt_clf':{'model':RandomForestClassifier,
-                                    'parameters':{'criterion':['gini', 'entropy'], 
-                                                'max_depth' : [2,5,10,None],
-                                                 }
-                                    },
                  'ab_clf':{'model':AdaBoostClassifier,
                                     'parameters':{'n_estimators':[50, 100, 150], 
                                                 'algorithm':['SAMME', 'SAMME.R'], 
                                                 'learning_rate' : [0.1,0.5,1]
                                                  }
                                     },
-                 'RandomForestClassifier':{'model':RandomForestClassifier,
+                 'rf_clf':{'model':RandomForestClassifier,
                                     'parameters':{'n_estimators':[50, 100, 150], 
                                                 'criterion':['gini', 'entropy'], 
                                                 'max_depth' : [2,5,10,None],
@@ -280,6 +246,18 @@ def model(name):
                                                  }
                                     }
                 }
-    model = models_dict[name]
-    
+    return models[name]
+
+
+def train_model(name,X_train,y_train):
+    " "
+    m = get_model(name)
+    print('Selected Model : ', m['model']())
+    model,params = m['model'], m['parameters']
+    grid = GridSearchCV(model(),params, cv=5)
+    grid.fit(X_train,y_train)
+    best_train_score = grid.best_score_
+    best_train_param = grid.best_params_
+    model = grid.best_estimator_
+    return model, best_train_score
 
