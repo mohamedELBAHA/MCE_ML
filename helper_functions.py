@@ -4,13 +4,14 @@
 
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.decomposition import PCA
-
-
-#pd.set_option('display.max_rows', None)
-#pd.set_option('display.max_columns', None)
-
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import SGDClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
 
 
 def import_dataset(name):
@@ -168,15 +169,14 @@ def feature_selection(df, method, variance_threshold = 0.95):
     
     """
     if method == 'PCA' :
-        print("     Feature Selection ==> PCA")
         X,_ = df.values[:,:-1],df.values[:,:-1]
         pca = PCA(n_components=len(df.columns)-1)
         pca.fit(X)
         y = np.cumsum(pca.explained_variance_ratio_) 
 
         nb_features = len(df.columns) - sum(y>=variance_threshold)
-        print(f'Number of features selected : {nb_features}')
-        print(' ✓ Data dimension successfuly reduced')
+        #print(f'Number of features selected : {nb_features}')
+        print(f' ✓ Data dimension successfuly reduced')
         new_X = pca.fit_transform(X)      
         data = pd.DataFrame(new_X[:,:nb_features]) 
         data[df.columns[-1]] = df.iloc[:,-1] # indexing the new dataframe
@@ -235,7 +235,51 @@ def train_model(model,parameters, X,y):
 
     
     """
-    clf = model(**params)
-    score
+    clf = model(parameters)
+    scor = cross_val_score(clf, X, y, cv=5, scoring='f1_macro').mean()
+    clf.fit(X,y)
+    return scor, clf
 
+
+def model(name):
+    models_dict = {'SVC':{'model':SVC, #Support vector Classifier
+                      'parameters':{'kernel':['linear', 'rbf', 'sigmoid', 'poly'], 
+                                                'C'     :[1, 10], 
+                                                'degree': [2, 3],
+                                                'gamma' : ['scale', 'auto']
+                                   }
+                     },
+               'lr':{'model':LogisticRegression, # Logistic Regression
+                                    'parameters':{'C':[1, 10], 
+                                                'fit_intercept' : [True,False],
+                                                'intercept_scaling' : [1,10],
+                                                 }
+                                    },
+                'sgd_clf':{'model':SGDClassifier, # Stochastic gradient descent classifier
+                                    'parameters':{'loss':['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'], 
+                                                'penalty':['l1', 'l2'], 
+                                                'fit_intercept' : [True,False],
+                                                 }
+                                    },
+                'dt_clf':{'model':RandomForestClassifier,
+                                    'parameters':{'criterion':['gini', 'entropy'], 
+                                                'max_depth' : [2,5,10,None],
+                                                 }
+                                    },
+                 'ab_clf':{'model':AdaBoostClassifier,
+                                    'parameters':{'n_estimators':[50, 100, 150], 
+                                                'algorithm':['SAMME', 'SAMME.R'], 
+                                                'learning_rate' : [0.1,0.5,1]
+                                                 }
+                                    },
+                 'RandomForestClassifier':{'model':RandomForestClassifier,
+                                    'parameters':{'n_estimators':[50, 100, 150], 
+                                                'criterion':['gini', 'entropy'], 
+                                                'max_depth' : [2,5,10,None],
+                                                'bootstrap' : [True,False],
+                                                 }
+                                    }
+                }
+    model = models_dict[name]
+    
 
