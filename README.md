@@ -33,8 +33,3 @@ hosted on the same source as the first,
 
 [ Chronic Kidney Disease](https://www.kaggle.com/mansoordaku/ckdisease)
 
-
-
-
-## Appendix
-###### ----------------------------------------------------------------------------
