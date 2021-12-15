@@ -194,7 +194,7 @@ def split_data(X,y,test_size):
         X    : features of the data
         type : array 
 
-        y    : target ( labels)
+        y    : target (labels)
         type : array 
 
         test_size : the test size 
@@ -210,11 +210,9 @@ def split_data(X,y,test_size):
     return X_train, X_test, y_train, y_test
 
 def get_model(name):
-    """
+        """
     @author: Ismail EL HADRAMI
-
     Get one ML model from a selection of models
-
     Parameters 
     ----------
         name : name of the model
@@ -223,7 +221,6 @@ def get_model(name):
     -------
         model : Selected Classification Model
         type: sklearn class
-
     """
     models = {'SVC':{'model':SVC, #Support vector Classifier
                       'parameters':{'kernel':['linear', 'rbf', 'sigmoid', 'poly'], 
@@ -262,14 +259,37 @@ def get_model(name):
 
 
 def train_model(name,X_train,y_train):
-    " "
+        """
+    @author: Mohamed EL BAHA, Sami RMILI
+    Compute the best model
+    Parameters 
+    ----------
+        name : name of the model
+        type : string
+
+        X_train : data to train
+        type : Dataframe
+
+        y_train : ground-truth for training
+        type : Dataframe
+    Returns 
+    -------
+        model : Selected Classification Model
+        type: sklearn class
+    """
+    # Get the model dictionnary by name
     m = get_model(name)
     print('Selected Model : ', m['model']())
+
+    # Specify model and parameters
     model,params = m['model'], m['parameters']
+
+    # Use grid search to come up with the best model (tune parameters)
     grid = GridSearchCV(model(),params, cv=5)
     grid.fit(X_train,y_train)
     best_train_score = grid.best_score_
     best_train_param = grid.best_params_
     model = grid.best_estimator_
+
     return model, best_train_score
 
